@@ -48,12 +48,12 @@ for nt in range(args.toys):
     my_errs.append( np.sqrt( my_toys[nt] ).tolist() )
 
 print("Plotting...")
-plt.figure()
+plt.figure(figsize=(8,6))
 plt.plot(x, my_mod_truth, 'b', label='Model', zorder=1)
 plt.plot(x, my_exp_truth, 'g-.', label='Background model', zorder=3)
-if args.sig > 0: plt.plot(x, my_sig_truth, 'r--', label='Signal model', zorder=5)
+if args.sig > 0: plt.plot(x, my_sig_truth, 'r--', label='Injected signal', zorder=5)
 for it,nt in enumerate(my_toys):
-    plt.errorbar( x, nt, xerr=bin_size, yerr=my_errs[it], color='k', fmt = 'none', marker='o', zorder=10, label='Pseudo-data')
+    plt.errorbar( x, nt, xerr=bin_size, yerr=my_errs[it], fmt = '.k', marker='o', zorder=10, label='Pseudo-data', markersize=3)
     break
 plt.legend(frameon=False)
 plt.xlabel("Observable")
@@ -64,6 +64,7 @@ to_json = {}
 to_json['bkg_model'] = my_exp_truth
 if args.sig > 0: to_json['sig_model'] = my_sig_truth
 to_json['toys'] = my_toys
+to_json['x'] = x.tolist()
 
 print('Saving data to json file')
 json_file = open(args.out+'.json', 'w')
